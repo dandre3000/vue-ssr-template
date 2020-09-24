@@ -1,60 +1,23 @@
 const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const { merge } = require('webpack-merge')
 const base = require('./webpack.base.js')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 let config = {
 	name: 'client',
 	target: 'web',
 	entry: {
-		app: './src/client-entry.js' // ./src/index.js
+		app: './src/client-entry.js'
 	},
 	output: {
 		publicPath: '/',
-		filename: 'client.bundle.js' // main.js
-	},
-	module: {
-		rules: [
-			{
-				test: /\.vue$/,
-				loader: 'vue-loader'
-			},
-			{
-				test: /\.css$/i,
-				use: [MiniCssExtractPlugin.loader, 'css-loader']
-			},
-			{
-				test: /\.(png|jpe?g|gif)$/i,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							esModule: false,
-							name: '[name].[ext]',
-							outputPath: 'assets/images/'
-						}
-					},
-				],
-			},
-			{
-				test: /\.html$/i,
-				loader: 'html-loader',
-			}
-		]
+		filename: 'client.bundle.js'
 	},
 	plugins: [
-		new VueLoaderPlugin(),
-		new MiniCssExtractPlugin(),
 		new HtmlWebpackPlugin({
 			inject: 'head',
 			template: './src/templates/index.html',
-			filename: 'templates/index.html',
-			minify: {
-				removeComments: true,
-				collapseWhitespace: true
-			}
+			filename: 'templates/index.html'
 		})
 	]
 }

@@ -1,14 +1,27 @@
 const express = require('express')
 const path = require('path')
 const fs = require('fs')
+const Vue = require('vue')
+
+let template = fs.readFileSync(path.join(__dirname, '/templates/index.html'), 'utf8').replace('ssr', '<!--vue-ssr-outlet-->')
+const renderer = require('vue-server-renderer').createRenderer({ template })
 
 module.exports = server => {
 	server.all('/', function (req, res) {
-		let data = fs.readFileSync(path.join(__dirname, '/templates/index.html'), 'utf8')
+		const main = new Vue({
+			el: '#app',
+			render: h => h('div', {}, 'Server Vue!')
+		})
 		
-		res.set('content-type','text/html')
-		res.send(data.replace('ssr', 'DeAundre Payne'))
-		res.end()
+		renderer.renderToString(main, (err, html) => {
+			if (err) {
+				res.status(500).end('Internal Server Error')
+				return
+			}
+			
+			res.set('content-type','text/html')
+			res.end(html)
+		})
 	})
 
 	server.use('/app.css', express.static(__dirname + '/app.css'))

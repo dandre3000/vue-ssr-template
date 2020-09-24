@@ -5,13 +5,16 @@ const base = require('./webpack.base.js')
 module.exports = merge(base, {
 	name: 'server',
 	target: 'node',
-	node: { // __dirname is set to output path
+	node: {
 		__dirname: false,
 		__filename: false,
 	},
-	externals: [nodeExternals()],
-	entry: './src/server-entry.js', // ./src/index.js
+	externals: [nodeExternals({
+		allowlist: /\.css$/
+	})],
+	entry: './src/server-entry.js',
 	output: {
-		filename: 'server.bundle.js' // main.js
+		filename: 'server.bundle.js',
+		libraryTarget: 'commonjs2'
 	}
 })

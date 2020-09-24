@@ -1,10 +1,10 @@
 import Vue from 'vue'
-import App from './App.vue';
+import App from './App.vue'
 import './assets/style.css' // extract css
 
 window.addEventListener('DOMContentLoaded', () => {
 	new Vue({
-		el: '#app',
+		el: '#client',
 		render: h => h(App)
 	})
 	

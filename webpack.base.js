@@ -1,9 +1,11 @@
 const path = require('path')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
-	mode: process.env.NODE_ENV || 'production', // production
+	mode: process.env.NODE_ENV || 'production',
 	output: {
-		path: path.resolve(__dirname, 'dist'), // dist
+		path: path.resolve(__dirname, 'dist'),
 	},
 	module: {
 		rules: [
@@ -24,8 +26,37 @@ module.exports = {
 						}
 					}
 				]
+			},
+			{
+				test: /\.vue$/,
+				loader: 'vue-loader'
+			},
+			{
+				test: /\.css$/i,
+				use: [MiniCssExtractPlugin.loader, 'css-loader']
+			},
+			{
+				test: /\.(png|jpe?g|gif)$/i,
+				use: [
+					{
+						loader: 'file-loader',
+						options: {
+							esModule: false,
+							name: '[name].[ext]',
+							outputPath: 'assets/images/'
+						}
+					},
+				],
+			},
+			{
+				test: /\.html$/i,
+				loader: 'html-loader',
 			}
 		]
 	},
+	plugins: [
+		new VueLoaderPlugin(),
+		new MiniCssExtractPlugin()
+	],
 	devtool: 'source-map'
 }
