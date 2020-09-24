@@ -3,7 +3,7 @@ const path = require('path')
 const fs = require('fs')
 const Vue = require('vue')
 
-let template = fs.readFileSync(path.join(__dirname, '/templates/index.html'), 'utf8').replace('ssr', '<!--vue-ssr-outlet-->')
+let template = fs.readFileSync(path.join(__dirname, '/templates/index.html'), 'utf8').replace('{ssr}', '<!--vue-ssr-outlet-->')
 const renderer = require('vue-server-renderer').createRenderer({ template })
 
 module.exports = server => {
