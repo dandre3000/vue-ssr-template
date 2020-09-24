@@ -1,4 +1,4 @@
-const fs = require('fs')
+// const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
 const Vue = require('vue')
@@ -6,12 +6,13 @@ const Vue = require('vue')
 const config = require('../webpack.client.js')
 const compiler = webpack(config)
 
-let template = fs.readFileSync(path.join(__dirname, '/templates/index.html'), 'utf8').replace('ssr', '<!--vue-ssr-outlet-->')
-const renderer = require('vue-server-renderer').createRenderer({ template })
-
 module.exports = server => {
 	// routing must be above webpack-dev-middleware & webpack-hot-middleware
 	server.all('/', function (req, res) {
+		// after middleware loads html into memory
+		let template = compiler.outputFileSystem.readFileSync(path.join(compiler.outputPath, '/templates/index.html'), 'utf8').replace('{ssr}', '<!--vue-ssr-outlet-->')
+		const renderer = require('vue-server-renderer').createRenderer({ template })
+
 		const main = new Vue({
 			el: '#app',
 			render: h => h('h1', {}, 'Server Vue!')
